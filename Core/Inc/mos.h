@@ -10,14 +10,14 @@
 #define MOS_CLOSE GPIO_PIN_RESET
 #define MOS_OPEN GPIO_PIN_SET
 
-#define is_in(num, threshold) (num >= threshold[0] && num <= threshold[1])
+#define not_in(num, threshold) (num < threshold[0] || num > threshold[1])
 
 typedef struct {
 	float vin_threshold[2];
-	float i1_threshold[2];
-	float i2_threshold[2];
-	float i3_threshold[2];
-	float i4_threshold[2];
+	float i1_max;
+	float i2_max;
+	float i3_max;
+	float i4_max;
 } config_t;
 
 typedef struct {

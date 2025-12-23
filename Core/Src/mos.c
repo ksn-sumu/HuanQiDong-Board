@@ -5,7 +5,7 @@
 #include "mos.h"
 #include <string.h>
 
-config_t config = {{0, 50}, {0, 3}, {0, 3}, {0, 3}, {0, 3}};
+config_t config = {{0, 50}, 3, 3, 3, 3};
 state_t state = {0, 0, 0, 0, 0, {MOS_CLOSE}};
 
 void ctrl_one_mos(const uint8_t mos, const GPIO_PinState mos_state) {
@@ -37,27 +37,21 @@ void ctrl_all_mos(const GPIO_PinState mos_state) {
 	HAL_GPIO_WritePin(CTRL2_GPIO_Port, CTRL2_Pin, mos_state);
 	HAL_GPIO_WritePin(CTRL3_GPIO_Port, CTRL3_Pin, mos_state);
 	HAL_GPIO_WritePin(CTRL4_GPIO_Port, CTRL4_Pin, mos_state);
-	for (int i = 0; i < 5; i++) {
+	for (int i = 0; i < 5; i++)
 		state.mos_state[i] = mos_state;
-	}
 }
 
 void check_all(void) {
-	if (!is_in(state.vin, config.vin_threshold)) {
+	if (not_in(state.vin, config.vin_threshold))
 		ctrl_all_mos(MOS_CLOSE);
-	}
-	if (!is_in(state.i1, config.i1_threshold)) {
+	if (state.i1 > config.i1_max)
 		ctrl_one_mos(1, MOS_CLOSE);
-	}
-	if (!is_in(state.i2, config.i2_threshold)) {
+	if (state.i2 > config.i2_max)
 		ctrl_one_mos(2, MOS_CLOSE);
-	}
-	if (!is_in(state.i3, config.i3_threshold)) {
+	if (state.i3 > config.i3_max)
 		ctrl_one_mos(3, MOS_CLOSE);
-	}
-	if (!is_in(state.i4, config.i4_threshold)) {
+	if (state.i4 > config.i4_max)
 		ctrl_one_mos(4, MOS_CLOSE);
-	}
 }
 
 #define CONFIG_FLASH_ADDR 0x08007C00UL
